@@ -1,0 +1,21 @@
+PhotoChango - Brandon Lucia - 2011
+
+Overview:
+---------
+PhotoChango is a program to convert video captured from a camera connected to
+your computer into sound, produced in the style of the Chango
+(https://github.com/blucia0a/Chango).  I wrote this software to render a music/dance composition that I am planning to write.  
+
+Installation:
+-------------
+Download the source files to some directory.  In that directory, run 'make',
+and the project should build.  There are some deprecated API warnings emitted
+by the CoreAudio library -- they are safe to ignore.  Run ./PhotoChango in the
+installation directory, and you should see video and hear sound.  Yay!
+
+Implementation Notes:
+---------------------
+The video capture support is implemented using OpenCV
+(opencv.willowgarage.com), and the audio support is implemented using the OS X
+core audio framework.  It is in the TODO for this project to add
+an abstraction layer, supporting multiple mode of audio support
