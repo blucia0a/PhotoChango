@@ -25,7 +25,7 @@ FrameAcquirer::FrameAcquirer(SinGen *s)
     // get an initial frame and duplicate it for later work
     IplImage *  current_frame = cvQueryFrame (camera);
     IplImage *  gray_image    = cvCreateImage(cvSize (current_frame->width, current_frame->height), IPL_DEPTH_8U, 1);
-	 assert (current_frame && gray_image);
+    assert (current_frame && gray_image);
     
     // as long as there are images ...
     while (current_frame = cvQueryFrame (camera))
@@ -34,10 +34,11 @@ FrameAcquirer::FrameAcquirer(SinGen *s)
         // convert to gray and downsize
         cvCvtColor (current_frame, gray_image, CV_BGR2GRAY);
         
-		float vals[NUM_WAVES];
-		pixelate(gray_image,vals);
-		this->sg->setAmplitudes(vals);
-		
+	float vals[NUM_WAVES];
+	pixelate(gray_image,vals);
+	this->sg->setAmplitudes(vals);
+       
+
         // just show the image
         cvShowImage (WINDOW_NAME, gray_image);
 
