@@ -28,6 +28,7 @@ FrameAcquirer::FrameAcquirer(SinGen *s)
       // get an initial frame and duplicate it for later work
       IplImage *  current_frame = cvQueryFrame (camera);
       IplImage *  gray_image    = cvCreateImage(cvSize (current_frame->width, current_frame->height), IPL_DEPTH_8U, 1);
+      IplImage *  gray_image2    = cvCreateImage(cvSize (current_frame->width, current_frame->height), IPL_DEPTH_8U, 1);
       assert (current_frame && gray_image);
       
       // as long as there are images ...
@@ -36,6 +37,7 @@ FrameAcquirer::FrameAcquirer(SinGen *s)
   	
           // convert to gray and downsize
         cvCvtColor (current_frame, gray_image, CV_BGR2GRAY);
+        cvConvert( gray_image, gray_image2);
           
   	float vals[NUM_WAVES];
   	pixelate(gray_image,vals);
@@ -43,6 +45,7 @@ FrameAcquirer::FrameAcquirer(SinGen *s)
          
   
           // just show the image
+          cvAddWeighted( gray_image2, 0.5, gray_image, 0.5, 0.5, gray_image);
           cvShowImage (WINDOW_NAME, gray_image);
   
           // cvShowImage (WINDOW_NAME, current_frame);
@@ -71,12 +74,11 @@ FrameAcquirer::FrameAcquirer(SinGen *s)
   
           cvSmooth( gray_image, gray_image);
           
-          cvRunningAvg( gray_image, avg_img, .200, NULL);
+          cvRunningAvg( gray_image, avg_img, .250, NULL);
   
           cvConvert( avg_img, gavg_img );
   
           cvAbsDiff( gray_image, gavg_img, diff_img );    
-
        
           cvConvert( diff_img, diff_img2 );
 
@@ -90,11 +92,15 @@ FrameAcquirer::FrameAcquirer(SinGen *s)
               vals[i] *= C8;
             }
   	    this->sg->setFrequencies(vals);
+          
+            cvAddWeighted( diff_img2, 0.5, gray_image, 0.5, 0.5, diff_img);
+            cvShowImage ( WINDOW_NAME, diff_img);
+          }else{
+            cvAddWeighted( diff_img, 0.5, diff_img2, 0.5, 0.5, diff_img);
+            cvShowImage ( WINDOW_NAME, diff_img);
+
           }
           
-          cvAddWeighted( diff_img2, 0.5, gray_image, 0.5, 0.5, diff_img);
-
-          cvShowImage ( WINDOW_NAME, diff_img);
 
           int key = cvWaitKey (30);
           if (key == 'q' || key == 'Q')
