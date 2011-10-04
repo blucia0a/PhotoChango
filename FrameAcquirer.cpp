@@ -7,6 +7,7 @@
 
 const char  * WINDOW_NAME  = "PhotoChango - Brandon Lucia 2011 - http://cs.washington.edu/homes/blucia0a - 'q' to quit";
 extern bool useMotion;
+extern bool useMotionAndLight;
 
 FrameAcquirer::FrameAcquirer(SinGen *s) 
 {
@@ -59,6 +60,7 @@ FrameAcquirer::FrameAcquirer(SinGen *s)
       IplImage *  gavg_img = cvCreateImage(cvSize (current_frame->width, current_frame->height), IPL_DEPTH_8U, 1);
       IplImage *  diff_img = cvCreateImage(cvSize (current_frame->width, current_frame->height), IPL_DEPTH_8U, 1);
       IplImage *  diff_img2 = cvCreateImage(cvSize (current_frame->width, current_frame->height), IPL_DEPTH_8U, 1);
+      IplImage *  diff_img3 = cvCreateImage(cvSize (current_frame->width, current_frame->height), IPL_DEPTH_8U, 1);
       
       // as long as there are images ...
       while (current_frame = cvQueryFrame (camera))
@@ -76,12 +78,21 @@ FrameAcquirer::FrameAcquirer(SinGen *s)
           cvAbsDiff( gray_image, gavg_img, diff_img );    
 
        
-  	  float vals[NUM_WAVES];
           cvConvert( diff_img, diff_img2 );
+
+  	  float vals[NUM_WAVES];
           pixelate(diff_img,vals);
   	  this->sg->setAmplitudes(vals);
+
+          if(useMotionAndLight){
+            pixelate(gray_image,vals);
+            for(int i = 0; i < NUM_WAVES; i++){
+              vals[i] *= C8;
+            }
+  	    this->sg->setFrequencies(vals);
+          }
           
-          cvAddWeighted( diff_img2, 0.5, diff_img, 0.5, 0.5, diff_img);
+          cvAddWeighted( diff_img2, 0.5, gray_image, 0.5, 0.5, diff_img);
 
           cvShowImage ( WINDOW_NAME, diff_img);
 

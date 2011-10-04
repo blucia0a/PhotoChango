@@ -48,6 +48,7 @@ public:
 	bool sstart();
 	bool sstop();
 	void setAmplitudes(float *vals);
+	void setFrequencies(float *vals);
 	
 	Wave *waves[NUM_WAVES];
 	

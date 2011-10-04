@@ -55,6 +55,13 @@ void SinGen::setAmplitudes(float *amps){
 	}
 }
 
+
+void SinGen::setFrequencies(float *freqs){
+	for(int i = 0; i < NUM_WAVES; i++){
+	    this->waves[i]->setFreqVal(freqs[i]);
+	}
+}
+
 void SinGen::setup(void){
 	
     OSStatus			err = kAudioHardwareNoError;
