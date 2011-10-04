@@ -9,9 +9,14 @@
 #include "SinGen.h"
 #include "FrameAcquirer.h"
 
+bool useMotion = false;
+
 int main(int argc, char *argv[]){
 	
 	fprintf(stderr,"PhotoChango - Brandon Lucia 2011 - Audiolyze the world! [http://cs.washington.edu/homes/blucia0a]\n");
+        if( argc == 2 ){
+          useMotion = true;
+        }
 	
 	SinGen *s = new SinGen();
 	s->setup();

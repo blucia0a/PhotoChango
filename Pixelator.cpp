@@ -43,10 +43,8 @@ void pixelate(IplImage *gimg, float *vals)
   }
   float favgIntensity[NUM_XSTEPS * NUM_YSTEPS];
   float segPixels = (float)(height * width) / (float)(NUM_XSTEPS * NUM_YSTEPS);
-  //fprintf(stderr,"height = %u. width = %u. xs = %u. ys = %u. seg = %f\n",height,width,NUM_XSTEPS, NUM_YSTEPS,segPixels);
   for(int i = 0; i < NUM_XSTEPS * NUM_YSTEPS; i++ ){
 	  
-      //printf("%d: %llu divided by %f = %f\n",i,avgIntensity[i],segPixels,((float)avgIntensity[i])/segPixels);
       favgIntensity[i] = (float)avgIntensity[i]/segPixels;
 	  vals[i] = favgIntensity[i] / 256.;
 	  if(vals[i] < 0.0){ vals[i] = 0.0;}
